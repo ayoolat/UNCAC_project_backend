@@ -6,6 +6,12 @@ const app = express();
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }))
 
-const PORT = process.env.PORT||5000
+app.use('/admin', require('./routes/adminRoutes'));
+app.get('/', (req, res, next) => {
+    console.log('hi');
+    res.send('hello')
+})
+
+const PORT = process.env.PORT||3000
 
 app.listen(PORT, console.log(`Server is listening on port ${PORT}`))
