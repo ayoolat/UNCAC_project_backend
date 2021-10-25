@@ -1,62 +1,45 @@
 const jwt = require('jsonwebtoken')
 const database = require('../database/connection')
 const usersDatabase = require('../database/connection2')
+const responseService = require('./responseService')
 
 const connectionUsers = usersDatabase.databaseConnection()
 const connection = database.databaseConnection()
 
 exports.adminLogin = async (userName, password) => {
     const adminUser =await (await (connectionUsers)).collection('admin').findOne({userName});
-    if(password === adminUser.password){
+    
+    if(!adminUser){
+        return responseService.responseService(false, userName, 'User does not exist')
+    }
+    else if(password === adminUser.password){
         const token = jwt.sign({
             data : userName
         }, 'mySecret', {
             expiresIn: '2h'
         })
-
-        return{
-            status : 'OK',
-            data : {token},
-            message : ""
-        }
-    }else{
-        return{
-            status : 'OK',
-            data : {},
-            message : "invalid password"
-        }
-    }
+        return responseService.responseService(true, token, 'admin logged in')
+    }  
 }
 
 exports.addAdmin = async (userName, password) => {
     try {
         const response = await (await (connectionUsers)).collection('admin').insertOne({userName, password})
         if(response){
-            return{
-                status : 'OK',
-                data : {adminId : response.insertedId},
-                message : ""
-            }
+            return responseService.responseService(true, response.insertedId, 'admin sign up successful')
         }
     } catch (error) {
-        console.log(error)
+        return responseService.responseService(false, error.message, 'An error occurred')
     }
 }
 
-exports.addAgency = (agencyName, password, confirmPassword, email, phoneNumber) => {
-    if(password === confirmPassword){
-        try {
-            const response = await (await (connection)).collection('agency').insertOne({agencyName, password, email, confirmPassword, phoneNumber})
-            if(response){
-                return{
-                    status : 'OK',
-                    data : {adminId : response.insertedId},
-                    message : ""
-                }
-            }
-        } catch (error) {
-            
-        }    
-    }
-
+exports.addAgency = async(agencyName, email, phoneNumber) => {
+    try {
+        const response = await (await (connection)).collection('agency').insertOne({agencyName, email, phoneNumber})
+        if(response){
+            return responseService.responseService(true, response.insertedId, 'Agency sign up successful')
+        }
+    } catch (error) {
+        return responseService.responseService(false, error.message, 'An error occurred')
+    }    
 }

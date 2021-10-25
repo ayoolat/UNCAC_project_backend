@@ -7,6 +7,9 @@ app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/admin', require('./routes/adminRoutes'));
+app.use('/agency', require('./routes/agenciesRoutes'));
+app.use('/reports', require('./routes/reportsRoutes'));
+
 app.get('/', (req, res, next) => {
     console.log('hi');
     res.send('hello')

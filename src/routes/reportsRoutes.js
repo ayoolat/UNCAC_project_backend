@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const fileUpload = require('../middlewares/fileUpload')
 const reportsController = require('../controllers/reportsController');
+const validation = require('../middlewares/validator')
+const schema = require('../models/joiModels')
 const authentication = require('../middlewares/authentication');
 
-router.post('/new/report', reportsController.addReport);
-router.post('/update/report', authentication, reportsController.updateReport);
-router.post('/findAll/reports', reportsController.getUpdate);
+router.post('/new', validation(schema.addReport),reportsController.addReport);
+router.post('/upload/:caseId', fileUpload.fileUpload, reportsController.uploadSupportingDocuments);
+router.post('/update', validation(schema.updateReport), authentication, reportsController.updateReport);
+router.get('/find/:caseId', reportsController.getUpdate);
 
 module.exports = router

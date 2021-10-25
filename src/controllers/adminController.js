@@ -13,7 +13,7 @@ exports.addAdmin = async(request, response) => {
 }
 
 exports.addAgency = async(request, response) => {
-    const {agencyName, password, confirmPassword, email, phoneNumber} = request.body
-    const res = await adminService.addAgency(agencyName, password, confirmPassword, email, phoneNumber)
+    const {agencyName, email, phoneNumber} = request.body
+    const res = await adminService.addAgency(agencyName, email, phoneNumber)
     response.send(res)
 }

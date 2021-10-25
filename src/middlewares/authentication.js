@@ -8,7 +8,7 @@ authenticateToken = (req, res, next) => {
         return res.status(400).json({error:"unauthorized request"})
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (err, verified) => {
+    jwt.verify(token, 'mySecret', (err, verified) => {
         if(err){
             return res.status(400).json({error: "invalid or expired token"})
         }
