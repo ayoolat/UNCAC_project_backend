@@ -18,6 +18,16 @@ exports.updateReport = async(request, response) => {
     response.send(res)
 }
 
+exports.getAllCases = async(request, response) => {
+    const res = await reportsService.getAllCases()
+    response.send(res)
+}
+exports.getAllCaseStatus = async(request, response) => {
+    const {status, agencyId} = request.body;
+    const res = await reportsService.getAllCaseStatus(status, agencyId);
+    response.send(res)
+}
+
 exports.getUpdate = async(request, response) => {
     const {caseId} = request.params
     const res = await reportsService.getCaseUpdates(caseId)
