@@ -1,10 +1,16 @@
 const express = require('express');
 const bodyParser =require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.json()) // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true }));
+
+// CORS
+app.use(cors({
+    origin: ['http://localhost:3001/', 'http://localhost:3001', '*'] // Set up your CORS
+}));
 
 app.use('/api/v1/admin', require('./routes/adminRoutes'));
 app.use('/api/v1/agency', require('./routes/agenciesRoutes'));
