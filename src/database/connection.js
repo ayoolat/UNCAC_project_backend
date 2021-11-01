@@ -1,12 +1,9 @@
 const { MongoClient } = require('mongodb');
 const ProvenDB = require('@southbanksoftware/provendb-node-driver').Database;
 
-const provenDB_URI = 'mongodb://team-eclipse:dreamteam@team-eclipse.provendb.io/team-eclipse?ssl=true';
-
-
 module.exports.databaseConnection = async() => {
     try {
-        const mongoClient = await MongoClient.connect(provenDB_URI, {
+        const mongoClient = await MongoClient.connect(process.env.PROVENDB_URI, {
             useNewUrlParser: true
         })
         
