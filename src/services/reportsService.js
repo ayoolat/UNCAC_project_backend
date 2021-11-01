@@ -73,6 +73,36 @@ exports.getCaseUpdates = async (Id) => {
     }
 }
 
+exports.getAllCases = async () => {
+    try {
+        const reports =await (await (connection)).collection('reports').find().toArray();
+        if(reports){
+            let result = [...reports];
+
+            result.forEach( value => {
+                    value.setName = "n/a";
+                    value.setEmail = "n/a";
+                }
+            );
+
+            return responseService.responseService(true, result, 'Reports successfully fetched')
+        }
+    } catch (error) {
+        return responseService.responseService(false, error.message, 'An error occurred')
+    }
+}
+
+exports.getAllCaseStatus = async (status, agencyId) => {
+    try {
+        const reports =await (await (connection)).collection('updates').find({status, agencyId},  { projection: { agencyId: 0 } }).toArray();
+        if(reports){
+            return responseService.responseService(true, reports, 'Reports successfully fetched')
+        }
+    } catch (error) {
+        return responseService.responseService(false, error.message, 'An error occurred')
+    }
+}
+
 exports.getAllUpdates = async (Id) => {
     try {
         const updates = await (await (connection)).collection('updates').find({caseId:Id});
