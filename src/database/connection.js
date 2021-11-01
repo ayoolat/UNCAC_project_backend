@@ -6,6 +6,8 @@ module.exports.databaseConnection = async() => {
         const mongoClient = await MongoClient.connect(process.env.PROVENDB_URI, {
             useNewUrlParser: true
         })
+
+
         
         const dbObject = mongoClient.db('team-eclipse');
 
