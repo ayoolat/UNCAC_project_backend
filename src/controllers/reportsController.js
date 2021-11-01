@@ -1,8 +1,8 @@
 const reportsService = require('../services/reportsService')
 
-exports.addReport = async(request, response) => {
-    const {name ,email, report, title} = request.body
-    const res = await reportsService.addNewReport(name, email, report, title)
+exports.addReport = async(request, response) => { 
+    const {title, type, description1, description2, preferredAgency} = request.body
+    const res = await reportsService.addNewReport(title, type, description1, description2, preferredAgency);
     response.send(res)
 }
 
