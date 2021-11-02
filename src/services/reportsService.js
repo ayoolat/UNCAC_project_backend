@@ -33,7 +33,11 @@ exports.createNewReport = async (title, type, description1, description2, prefer
         if(supportingDocuments){
             supportingDocuments.forEach(async(documents) => {
                 const file = `uploads/${documents.originalname}`
-                await (await (connection)).collection('te_supportingDocuments').insertOne({caseId:response.insertedId, document:file, dateCreated: new Date()})
+                await (await (connection)).collection('te_supportingDocuments').insertOne({
+                    caseId: response.insertedId, 
+                    document:file, 
+                    dateCreated: new Date()
+                })
             });
         }
         if(response){
@@ -96,17 +100,17 @@ exports.getCaseUpdates = async (Id) => {
 
 exports.getAllCases = async () => {
     try {
-        const reports =await (await (connection)).collection('reports').find().toArray();
+        const reports =await (await (connection)).te_reports.find({}).toArray();
         if(reports){
             let result = [...reports];
 
-            result.forEach( value => {
+           /*  result.forEach( value => {
                     value.setName = "n/a";
                     value.setEmail = "n/a";
                 }
-            );
+            ); */
 
-            return responseService.responseService(true, result, 'Reports successfully fetched')
+            return responseService.responseService(true, reports, 'Reports successfully fetched')
         }
     } catch (error) {
         return responseService.responseService(false, error.message, 'An error occurred')

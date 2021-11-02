@@ -24,7 +24,7 @@ const schemas = {
     }),
     createReport: Joi.object().keys({
         title: Joi.string().min(3).max(30).required(),
-        type: Joi.string().min(3).max(30),
+        type: Joi.string().min(3).max(30).required(),
         description1: Joi.string().min(5).max(1000),
         description2: Joi.string().min(5).max(2000),
         preferredAgency: Joi.string().min(2).max(50),
