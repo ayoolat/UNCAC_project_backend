@@ -99,10 +99,8 @@ exports.getCaseUpdates = async (Id) => {
 }
 
 exports.getAllCases = async () => {
-    console.log(" No 1")
     try {
         const reports = await (await (connection)).collection('te_reports').find().toArray();        
-        console.log(" No 2")
         if(reports){
             let result = [...reports];
 
