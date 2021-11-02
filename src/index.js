@@ -13,6 +13,9 @@ app.use(cors({
     origin: true,
     origin: ['http://localhost:3001/', 'http://localhost:3001', '*'] // Set up your CORS
 })); */
+app.use(cors());
+app.options('*', cors());
+
 
 app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
