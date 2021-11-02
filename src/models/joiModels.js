@@ -28,6 +28,7 @@ const schemas = {
         description1: Joi.string().min(5).max(1000),
         description2: Joi.string().min(5).max(2000),
         preferredAgency: Joi.string().min(2).max(50),
+        supportingDocuments: Joi.array()
     }),
     updateReport: Joi.object().keys({
         status: Joi.number().max(5).min(1),
