@@ -7,10 +7,18 @@ const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true }));
 
-// CORS
+/* // CORS
 app.use(cors({
+    credentials: true, 
+    origin: true,
     origin: ['http://localhost:3001/', 'http://localhost:3001', '*'] // Set up your CORS
-}));
+})); */
+
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
 app.use('/api/v1/admin', require('./routes/adminRoutes'));
 app.use('/api/v1/agency', require('./routes/agenciesRoutes'));
