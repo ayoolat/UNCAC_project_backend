@@ -25,10 +25,10 @@ const schemas = {
     createReport: Joi.object().keys({
         title: Joi.string().min(3).max(30).required(),
         type: Joi.string().min(3).max(30).required(),
-        description1: Joi.string().min(5).max(1000),
-        description2: Joi.string().min(5).max(2000),
-        preferredAgency: Joi.string().min(2).max(50),
-        supportingDocuments: Joi.array()
+        description1: Joi.string().min(5).max(1000).required(),
+        description2: Joi.string(),
+        preferredAgency: Joi.string(),
+        supportingDocuments: Joi.any()
     }),
     updateReport: Joi.object().keys({
         status: Joi.number().max(5).min(1),
