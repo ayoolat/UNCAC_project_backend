@@ -12,6 +12,7 @@ router.post('/upload/:caseId', fileUpload.fileUpload, reportsController.uploadSu
 router.post('/update', validation(schema.updateReport), authentication, reportsController.updateReport);
 router.get('/find/:caseId', reportsController.getUpdate);
 router.get('/find', reportsController.getAllCases);
+router.get('/all', reportsController.getAllReports);
 router.get('/find/caseStatus/:status/:agencyId', authentication, reportsController.getAllCaseStatus);
 
 module.exports = router
