@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { MongoClient } = require('mongodb');
 const ProvenDB = require('@southbanksoftware/provendb-node-driver').Database;
 

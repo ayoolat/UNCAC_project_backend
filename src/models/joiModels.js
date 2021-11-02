@@ -22,6 +22,13 @@ const schemas = {
         title: Joi.string().min(3).max(50).required(),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
     }),
+    createReport: Joi.object().keys({
+        title: Joi.string().min(3).max(30).required(),
+        type: Joi.string().min(3).max(30),
+        description1: Joi.string().min(5).max(1000),
+        description2: Joi.string().min(5).max(2000),
+        preferredAgency: Joi.string().min(2).max(50),
+    }),
     updateReport: Joi.object().keys({
         status: Joi.number().max(5).min(1),
         comment: Joi.string().min(15).max(500).required(),

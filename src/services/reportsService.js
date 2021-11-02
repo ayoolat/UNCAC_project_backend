@@ -23,6 +23,27 @@ exports.addNewReport = async (name ,email, report, title) => {
     }
 }
 
+exports.createNewReport = async (title, type, description1, description2, preferredAgency, status, supportingDocuments = false) => {
+    try {
+        const caseId = 'UNCAC-' + uuidv4()
+        const response = await (await (connection)).collection('te_reports').insertOne({caseId, title, type, description1, description2, preferredAgency, status, dateCreated : new Date()})
+        if(title || description1){
+            await (await (connectionUsers)).collection('te_whistleBlower').insertOne({title, type, description1, description2, preferredAgency, status, caseId:response.insertedId, dateCreated: new Date()})
+        }
+        if(supportingDocuments){
+            supportingDocuments.forEach(async(documents) => {
+                const file = `uploads/${documents.originalname}`
+                await (await (connection)).collection('te_supportingDocuments').insertOne({caseId:response.insertedId, document:file, dateCreated: new Date()})
+            });
+        }
+        if(response){
+            return responseService.responseService(true, caseId, `Report Added, \nCase ID: ${caseId}`);
+        }
+    } catch (error) {
+        return responseService.responseService(false, error.message, 'An error occurred')
+    }
+}
+
 exports.uploadSupportingDocuments = async (supportingDocuments, caseId) => {
     try {
         if(supportingDocuments){

@@ -6,6 +6,18 @@ exports.addReport = async(request, response) => {
     response.send(res)
 }
 
+exports.createReport = async(request, response) => { 
+    let supportingDocuments;
+    const {title, type, description1, description2, preferredAgency} = request.body
+    if(!response.files || Object.keys(response.files).length === 0) {
+        supportingDocuments = false; 
+    } else {
+        supportingDocuments = response.files;
+    }
+    const res = await reportsService.createNewReport(title, type, description1, description2, preferredAgency, "open", supportingDocuments);
+    response.send(res)
+}
+
 exports.uploadSupportingDocuments = async(request, response) => {
     const {caseId} = request.params
     const res = await reportsService.uploadSupportingDocuments(request.files, caseId)
