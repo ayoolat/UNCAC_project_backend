@@ -24,7 +24,7 @@ exports.adminLogin = async (userName, password) => {
             }, process.env.SECRET_KEY, {
                 expiresIn: '2h'
             })
-            return responseService.responseService(true, token, 'Admin logged in')
+            return responseService.responseService(true, { userName: adminUser.userName, token}, 'Admin logged in')
         } 
     } catch (error) {
         return responseService.responseService(false, error.message, 'An error occurred')
