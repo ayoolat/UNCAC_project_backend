@@ -82,16 +82,19 @@ exports.updateCaseStatus = async (status, comment, caseId, agencyId) => {
 
 exports.getCaseUpdates = async (Id) => {
     try {
-        const reports =await (await (connection)).collection('reports').findOne({caseId:Id});
+        const reports = await (await (connection)).collection('te_reports').findOne({caseId:Id});
         if(reports){
-            const update = await (await (connection)).collection('updates').findOne({caseId:Id});
+            /* const update = await (await (connection)).collection('updates').findOne({caseId:Id});
             const agencyId = update.agencyId
-            const agency = await (await (connection)).collection('agency').find(ObjectId(agencyId)).toArray();
-            const {name, email, report, title, dateCreated, caseId} = reports
+            const agency = await (await (connection)).collection('agency').find(ObjectId(agencyId)).toArray(); */
+            /* const {name, email, report, title, dateCreated, caseId} = reports
             const {status, comment, lastUpdated} = update
             const {agencyName, phoneNumber} = agency[0]
             const agencyEmail = agency[0].email
-            return responseService.responseService(true, { name, email, report, title, dateCreated, caseId, status, comment, lastUpdated, agencyName, phoneNumber, agencyEmail}, 'Report successfully fetched')
+            return responseService.responseService(true, { name, email, report, title, dateCreated, caseId, status, comment, lastUpdated, agencyName, phoneNumber, agencyEmail}, 'Report successfully fetched') */
+            return responseService.responseService(true, reports, 'Report successfully fetched');
+        } else {
+            return responseService.responseService(false, { msg : "Case does not exists"}, 'Case does not exists!');
         }
     } catch (error) {
         return responseService.responseService(false, error.message, 'An error occurred')
