@@ -26,9 +26,9 @@ const schemas = {
         title: Joi.string().min(3).max(60).required(),
         type: Joi.string().min(3).max(30).required(),
         description1: Joi.string().min(5).max(1000).required(),
-        description2: Joi.string(),
-        preferredAgency: Joi.string(),
-        supportingDocuments: Joi.any()
+        description2: Joi.string().allow("").optional(),
+        preferredAgency: Joi.string().allow("").optional(),
+        supportingDocuments: Joi.any().optional()
     }),
     updateReport: Joi.object().keys({
         status: Joi.number().max(5).min(1),
