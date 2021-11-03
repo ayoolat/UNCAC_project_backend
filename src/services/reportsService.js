@@ -114,6 +114,8 @@ exports.getAllCases = async () => {
             ); */
 
             return responseService.responseService(true, reports, 'Reports successfully fetched')
+        } else {
+            return responseService.responseService(false, { msg : "No petitions found"}, 'No petition found!')
         }
     } catch (error) {
         return responseService.responseService(false, error.message, 'An error occurred')

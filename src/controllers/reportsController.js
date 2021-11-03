@@ -16,7 +16,8 @@ exports.createReport = async(request, response) => {
             supportingDocuments = response.files;
         }
         const res = await reportsService.createNewReport(title, type, description1, description2, preferredAgency, "open", supportingDocuments);
-        (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+        let result  = res;
+        (result["status"] == true) ? response.status(200).send(result) : response.status(400).send(result);
     } catch (e) {
         return response.status(400).send({ status: 400, msg: e.message });
     }
@@ -37,7 +38,8 @@ exports.updateReport = async(request, response) => {
 exports.getAllCases = async(request, response) => {
     try {
         const res = await reportsService.getAllReportsFull()
-        (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+        let result  = res;
+        (result["status"] == true) ? response.status(200).send(result) : response.status(400).send(result);
     } catch (e) {
         return response.status(400).send({ status: 400, msg: e.message });
     }
@@ -46,7 +48,8 @@ exports.getAllCases = async(request, response) => {
 exports.getAllReports = async(request, response) => {
     try {
         const res = await reportsService.getAllCases()
-        (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+        let result  = res;
+        (result["status"] == true) ? response.status(200).send(res) : response.status(400).send(res);
     } catch (e) {
         return response.status(400).send({ status: 400, msg: e.message });
     }
