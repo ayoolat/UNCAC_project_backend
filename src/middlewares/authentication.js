@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
 authenticateToken = (req, res, next) => {
@@ -8,7 +9,7 @@ authenticateToken = (req, res, next) => {
         return res.status(400).json({error:"unauthorized request"})
     }
 
-    jwt.verify(token, 'mySecret', (err, verified) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, verified) => {
         if(err){
             return res.status(400).json({error: "invalid or expired token"})
         }

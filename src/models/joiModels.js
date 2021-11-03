@@ -3,12 +3,13 @@ const Joi = require('joi');
 const schemas = {
     signUpAdmin: Joi.object().keys({
         userName: Joi.string().alphanum().min(3).max(20).required(),
-        password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).required(),
+        password: Joi.string().required()
     }),
     signUpAgency: Joi.object().keys({
         agencyName: Joi.string().alphanum().min(3).max(15).required(),
         phoneNumber: Joi.string().length(11).pattern(/^[0-9]+$/).required(),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
+        email: Joi.string().email().required(),
+        password: Joi.string().optional()
     }),
     signUpAgent: Joi.object().keys({
         agencyName: Joi.string().alphanum().min(3).max(15).required(),

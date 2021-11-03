@@ -3,7 +3,8 @@ const reportsService = require('../services/reportsService')
 exports.addReport = async(request, response) => { 
     const {title, type, description1, description2, preferredAgency} = request.body
     const res = await reportsService.addNewReport(title, type, description1, description2, preferredAgency);
-    (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+    let result  = res;
+    (result["status"] == true) ? response.status(200).send(res) : response.status(400).send(res);
 }
 
 exports.createReport = async(request, response) => { 
@@ -26,13 +27,15 @@ exports.createReport = async(request, response) => {
 exports.uploadSupportingDocuments = async(request, response) => {
     const {caseId} = request.params
     const res = await reportsService.uploadSupportingDocuments(request.files, caseId)
-    (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+    let result  = res;
+    (result["status"] == true) ? response.status(200).send(res) : response.status(400).send(res);
 }
 
 exports.updateReport = async(request, response) => {
     const {status, comment, caseId, agencyId} = request.body
     const res = await reportsService.updateCaseStatus(status, comment, caseId, agencyId)
-    (res.status == true) ? response.status(200).send(res) : response.status(400).send(res);
+    let result  = res;
+    (result["status"] == true) ? response.status(200).send(res) : response.status(400).send(res);
 }
 
 exports.getAllCases = async(request, response) => {
