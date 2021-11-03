@@ -67,6 +67,26 @@ exports.loginAgency = async (request, response) => {
     }
 }
 
+exports.verifyAgencyToken = async(request, response) => {
+    try {
+        const {token} = request.body
+        if(!token || token == null){
+            return response.status(400).json({error:" Token can be empty"})
+        }
+    
+        jwt.verify(token, process.env.SECRET_KEY, (err, verified) => {
+            if(err){
+                return response.status(400).json({error: "Invalid or expired token"})
+            }
+            else{
+                return response.status(200).send({ status: 200, data: verified });
+            }
+        })
+    } catch (e) {
+        return response.status(400).send({ status: 400, msg: e.message });
+    }
+}
+
 exports.claimCase = async (request, response) => {
     try {
         const { caseId, agencyName } = request.body;
