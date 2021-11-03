@@ -32,10 +32,10 @@ const schemas = {
         supportingDocuments: Joi.any().optional()
     }),
     updateReport: Joi.object().keys({
-        status: Joi.number().max(5).min(1),
-        comment: Joi.string().min(15).max(500).required(),
         caseId: Joi.string().min(3).max(50).required(),
-        agencyId: Joi.string().min(3).max(50).required(),
+        agencyName: Joi.string().min(3).max(50).optional(),
+        status: Joi.number().max(10).min(1).optional(),
+        comment: Joi.string().min(5).max(500).optional()
     }),
     addToHallOfShame: Joi.object().keys({
         fullName: Joi.string().min(3).max(50),

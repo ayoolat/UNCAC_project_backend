@@ -1,9 +1,106 @@
+require("dotenv").config();
 const agencyService = require('../services/agenciesService')
+const jwt = require('jsonwebtoken')
+const usersDatabase = require('../database/connection2')
+const database = require('../database/connection')
+const crypt = require('crypto-js')
+
+const connectionUsers = usersDatabase.databaseConnection()
+const connection = database.databaseConnection()
 
 exports.agentLogin = async(request, response) => {
     const {email, password, agencyId} = request.body
     const res = await agencyService.loginAgent(email, password, agencyId)
     response.send(res)
+}
+
+exports.loginAgency = async (request, response) => {
+    try {
+        const { email, password } = request.body;
+        if(!email || !password) {
+            return response.status(400).send({
+                status: 400, 
+                msg : "Fields cannot be empty!"
+            })
+        }
+        const agency = await (await (connectionUsers)).collection('te_agency').findOne({email});
+        if(!agency) {
+            return response.status(400).send({
+                status: 400, 
+                msg : `Account does not exists!`
+            })
+        }
+
+        const bytes = crypt.AES.decrypt(agency.password, process.env.SECRET_KEY)
+        const decryptPassword = bytes.toString(crypt.enc.Utf8)
+        
+        if(password === decryptPassword){
+            const token = jwt.sign({
+                data : {
+                    agencyName : agency.agencyName,
+                    email, 
+                }
+            }, process.env.SECRET_KEY, {
+                expiresIn: '2h'
+            })
+            return response.status(200).send({
+                status: 400, 
+                data: {
+                    token: token,
+                    agencyName : agency.agencyName,
+                    email
+                },
+                msg : "Agency login successful!"
+            })
+        } else {
+            return response.status(400).send({
+                status: 400, 
+                msg : `Incorrect password for ${email}!`
+            })
+        }
+    } catch (error) {
+        return response.status(400).send({
+            status: 400, 
+            error: error.message,
+            msg : "An error occurred"
+        })    
+    }
+}
+
+exports.claimCase = async (request, response) => {
+    try {
+        const { caseId, agencyName } = request.body;
+        if(!caseId) {
+            return response.status(400).send({
+                status: 400, 
+                msg : "No case ID!"
+            })
+        }
+        const report = await (await (connection)).collection('te_reports').findOne({caseId});
+        if(!report) {
+            return response.status(400).send({
+                status: 400, 
+                msg : `Petition does not exists!`
+            })
+        }
+
+        const res = await (await (connection)).collection('te_updates').insertOne({caseId, agencyName, status: "in_progress", dateCreated : new Date()})
+        if(res){
+            return response.status(200).send({
+                status: 200,
+                data: {
+                    caseId, agencyName, status: "in_progress"
+                }, 
+                msg : `Case claimed, \nCase ID: ${caseId}`
+            });
+        }
+    } catch (error) {
+        return response.status(400).send({
+            status: 400, 
+            error: error.message,
+            msg : "An error occurred"
+        })    
+    }
 }
 
 exports.addAgent = async(request, response) => {
