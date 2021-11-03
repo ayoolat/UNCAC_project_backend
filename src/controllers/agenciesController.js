@@ -106,13 +106,19 @@ exports.claimCase = async (request, response) => {
 
         const res = await (await (connection)).collection('te_updates').insertOne({caseId, agencyName, status: "in_progress", dateCreated : new Date()})
         if(res){
-            return response.status(200).send({
-                status: 200,
-                data: {
-                    caseId, agencyName, status: "in_progress"
-                }, 
-                msg : `Case claimed, \nCase ID: ${caseId}`
+            var myquery = { caseId: caseId };
+            var newvalues = { $set: {status: "In Progress" } };
+            connection.collection("te_reports").updateOne(myquery, newvalues, function(err, res) {
+                if (err) throw err;
+                return response.status(200).send({
+                    status: 200,
+                    data: {
+                        caseId, agencyName, status: "in_progress"
+                    }, 
+                    msg : `Case claimed, \nCase ID: ${caseId}`
+                });
             });
+            
         }
     } catch (error) {
         return response.status(400).send({
