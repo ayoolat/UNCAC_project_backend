@@ -10,6 +10,8 @@ const connection = database.databaseConnection()
 
 exports.adminLogin = async (userName, password) => { 
     try {
+        if(!userName || !password)  return responseService.responseService(false,{ msg : "Fields cannot be empty!"}, 'Fields cannot be empty!')
+ 
         const adminUser =await (await (connectionUsers)).collection('te_admin').findOne({userName});
         const bytes = crypt.AES.decrypt(adminUser.password, process.env.SECRET_KEY)
         const decryptPassword = bytes.toString(crypt.enc.Utf8)
@@ -17,7 +19,7 @@ exports.adminLogin = async (userName, password) => {
         if(!adminUser){
             return responseService.responseService(false, userName, 'Admin does not exist')
         }
-        else if(password === decryptPassword){
+        if(password === decryptPassword){
             const token = jwt.sign({
                 adminID: adminUser._id,
                 admin: adminUser.userName
@@ -25,7 +27,9 @@ exports.adminLogin = async (userName, password) => {
                 expiresIn: '2h'
             })
             return responseService.responseService(true, { userName: adminUser.userName, token}, 'Admin logged in')
-        } 
+        }  else {
+            return responseService.responseService(false, {msg: "Invalid Login Details"}, 'Invalid Login Details!')
+        }
     } catch (error) {
         return responseService.responseService(false, error.message, 'An error occurred')
     }
